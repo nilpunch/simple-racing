@@ -18,9 +18,9 @@ public class WaypointsRoute : MonoBehaviour
 
 		Vector3 lookaheadPosition = lastPosition;
 
-		for (int i = closest.IndexFirst; i < closest.IndexFirst + maxSearchDepth; i++)
+		for (int i = 0; i < maxSearchDepth; i++)
 		{
-			Vector3 nextPosition = _waypoints[i % _waypoints.Length].position;
+			Vector3 nextPosition = _waypoints[(i + closest.IndexSecond) % _waypoints.Length].position;
 			Vector3 direction = Vector3.Normalize(nextPosition - lastPosition);
 
 			// Check for sharp turn
@@ -31,7 +31,7 @@ public class WaypointsRoute : MonoBehaviour
 			lastDirection = direction;
 
 			(Vector2 Position, float Fraction)? lineCircleIntersection =
-				PurePursuitUtils.LineCircleIntersection(lastPosition.ToXZ(), nextPosition.ToXZ(), carPosition, lookaheadRadius);
+				PurePursuitUtils.LineCircleIntersection(lastPosition.ToXZ(), nextPosition.ToXZ(), carPosition.ToXZ(), lookaheadRadius);
 
 			if (lineCircleIntersection.HasValue)
 			{
@@ -41,7 +41,7 @@ public class WaypointsRoute : MonoBehaviour
 			lastPosition = nextPosition;
 		}
 
-		if (Vector2.Distance(lastPosition.ToXZ(), carPosition) < lookaheadRadius)
+		if (Vector2.Distance(lastPosition.ToXZ(), carPosition.ToXZ()) < lookaheadRadius)
 		{
 			return lastPosition;
 		}

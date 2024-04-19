@@ -67,6 +67,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7352386073491426683, guid: 71e4e41559d3d4340be1e9ab38a48ffb, type: 3}
+      propertyPath: _steeringChangeSpeed
+      value: 200
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 71e4e41559d3d4340be1e9ab38a48ffb, type: 3}
 --- !u!1 &6418533333262807411 stripped
@@ -88,8 +92,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _vehicleController: {fileID: 7765386166522587225}
   _waypointsRoute: {fileID: 0}
-  _lookaheadRadius: 3
-  _wheelBase: 2.5
+  _lookaheadRadius: 7
+  _wheelBase: 2
+  _throttle: 0.5
 --- !u!114 &7765386166522587225 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7352386073491426683, guid: 71e4e41559d3d4340be1e9ab38a48ffb, type: 3}

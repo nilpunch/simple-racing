@@ -31,6 +31,8 @@ public class PurePursuitVehicle : MonoBehaviour
 		{
 			deltaHeading -= TwoPI;
 		}
+		
+		Debug.DrawLine(lookaheadPosition, lookaheadPosition + Vector3.up, Color.cyan);
 				
 		float targetSteering = Mathf.Clamp(
 			Mathf.Atan2(2f * _wheelBase * Mathf.Sin(Mathf.Clamp(deltaHeading, -HalfPI, HalfPI)) / lookToAhead.magnitude, 1f) * 57.29578f,
