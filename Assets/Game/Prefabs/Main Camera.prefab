@@ -133,7 +133,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _camera: {fileID: 1732737313870944760}
   _followTarget: {fileID: 0}
-  _cameraRotationSpeed: 30
-  _cameraFollowSpeed: 60
+  _cameraRotationSpeed: 20
+  _cameraFollowSpeed: 30
   _followOffset: {x: 0, y: 5, z: -10}
   _targetOffset: {x: 0, y: 2.5, z: 1}

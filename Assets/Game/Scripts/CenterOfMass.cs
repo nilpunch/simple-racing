@@ -23,10 +23,11 @@ public class CenterOfMass : MonoBehaviour
 
 	private void OnDrawGizmosSelected()
 	{
-		if (_rigidBody != null)
+		var rigidbody = GetComponent<Rigidbody>();
+		if (rigidbody != null)
 		{
 			Gizmos.color = Color.green;
-			Gizmos.DrawSphere(_rigidBody.transform.TransformPoint(_rigidBody.centerOfMass), 0.1f);
+			Gizmos.DrawSphere(rigidbody.transform.TransformPoint(rigidbody.centerOfMass + _centerOfMassOffset), 0.1f);
 		}
 	}
 }
