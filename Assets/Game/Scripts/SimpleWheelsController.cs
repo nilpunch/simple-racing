@@ -1,6 +1,7 @@
+using System;
 using UnityEngine;
 
-public class WheelsController : MonoBehaviour
+public class SimpleWheelsController : MonoBehaviour
 {
 	[SerializeField] private WheelCollider _frontLeft;
 	[SerializeField] private WheelCollider _frontRight;
