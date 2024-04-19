@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -5,18 +6,79 @@ public class WaypointsRoute : MonoBehaviour
 {
 	[SerializeField] private Transform[] _waypoints;
 	[SerializeField] private bool _isLooped = true;
-	
-	
-	
-	public static (int IndexFirst, int IndexSecond, float Fraction) GetClosestPoint(IReadOnlyList<Transform> path, Vector3 vehiclePosition, bool isLooped = false)
+
+	public Vector3 GetLookaheadPosition(Vector3 carPosition, float lookaheadRadius)
+	{
+		const int maxSearchDepth = 8;
+
+		var closest = GetClosestPoint(carPosition);
+
+		Vector3 lastPosition = _waypoints[closest.IndexFirst].position;
+		Vector3 lastDirection = Vector3.Normalize(_waypoints[closest.IndexSecond].position - lastPosition);
+
+		Vector3 lookaheadPosition = lastPosition;
+
+		for (int i = closest.IndexFirst; i < closest.IndexFirst + maxSearchDepth; i++)
+		{
+			Vector3 nextPosition = _waypoints[i % _waypoints.Length].position;
+			Vector3 direction = Vector3.Normalize(nextPosition - lastPosition);
+
+			// Check for sharp turn
+			if (Vector3.Dot(lastDirection, direction) < -0.3f)
+			{
+				break;
+			}
+			lastDirection = direction;
+
+			(Vector2 Position, float Fraction)? lineCircleIntersection =
+				PurePursuitUtils.LineCircleIntersection(lastPosition.ToXZ(), nextPosition.ToXZ(), carPosition, lookaheadRadius);
+
+			if (lineCircleIntersection.HasValue)
+			{
+				lookaheadPosition = Vector3.Lerp(lastPosition, nextPosition, lineCircleIntersection.Value.Fraction);
+			}
+
+			lastPosition = nextPosition;
+		}
+
+		if (Vector2.Distance(lastPosition.ToXZ(), carPosition) < lookaheadRadius)
+		{
+			return lastPosition;
+		}
+
+		return lookaheadPosition;
+	}
+
+	private void OnDrawGizmos()
+	{
+		Gizmos.color = Color.yellow;
+
+		int segmentsCount = _waypoints.Length - 1;
+		if (_isLooped)
+		{
+			segmentsCount += 1;
+		}
+
+		for (int i = 0; i < segmentsCount; i++)
+		{
+			Vector3 lineStart = _waypoints[i % _waypoints.Length].position;
+			Vector3 lineEnd = _waypoints[(i + 1) % _waypoints.Length].position;
+
+			Gizmos.DrawLine(lineStart, lineEnd);
+		}
+	}
+
+	public (int IndexFirst, int IndexSecond, float Fraction) GetClosestPoint(Vector3 vehiclePosition)
 	{
 		int closestIndexFirst = -1;
 		int closestIndexSecond = -1;
 		float closestFraction = 0f;
 		float closestDistanceSqr = float.MaxValue;
 
+		IReadOnlyList<Transform> path = _waypoints;
+
 		int segmentsCount = path.Count - 1;
-		if (isLooped)
+		if (_isLooped)
 		{
 			segmentsCount += 1;
 		}

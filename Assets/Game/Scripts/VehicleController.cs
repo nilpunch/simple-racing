@@ -20,6 +20,8 @@ public class VehicleController : MonoBehaviour
 	public float ThrottleInput { get; set; }
 	public float BrakesInput { get; set; }
 
+	public float MaxSteeringAngle => _maxSteeringAngle;
+	
 	private void FixedUpdate()
 	{
 		_currentSteeringAngle = Mathf.MoveTowardsAngle(_currentSteeringAngle,
